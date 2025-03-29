@@ -146,8 +146,16 @@ async def input_chain_single(dut, bit, ff_index):
     ######################
     # TODO: YOUR CODE HERE 
     ######################
-
-    pass
+    
+    # ff is 0-indexed
+    
+    dut.scan_in.value = bit
+    await step_clock(dut)
+    
+    for i in range(ff_index):
+      await step_clock(dut)
+      
+    return
     
 #-------------------------------------------------------------------
 
@@ -163,8 +171,16 @@ async def input_chain(dut, bit_list, ff_index):
     ######################
     # TODO: YOUR CODE HERE 
     ######################
-
-    pass
+    
+    dut.scan_in.value = bit
+    await step_clock(dut)
+    
+    for i in range(ff_index + 1):
+      dut.scan_in.value = bit_list[0]
+      await step_clock(dut)
+      bit_list = bit_list[1:]
+      
+    return
 
 #-----------------------------------------------
 
@@ -176,8 +192,12 @@ async def output_chain_single(dut, ff_index):
     ######################
     # TODO: YOUR CODE HERE 
     ######################
-
-    pass       
+    output = 0
+    for i in range(CHAIN_LENGTH - ff_index):
+      output = (output << 1) + dut.scan_out.value
+      await step_clock(dut)
+    
+    return output       
 
 #-----------------------------------------------
 
@@ -191,8 +211,15 @@ async def output_chain(dut, ff_index, output_length):
     ######################
     # TODO: YOUR CODE HERE 
     ######################
-
-    pass       
+    output = 0
+    for i in range(CHAIN_LENGTH - ff_index):
+      await step_clock(dut)
+    
+    for i in range(output_length): 
+      output = (output << 1) + dut.scan_out.value
+      await step_clock(dut)
+    
+    return output
 
 #-----------------------------------------------
 
@@ -207,6 +234,17 @@ async def test(dut):
 
     # Setup the scan chain object
     chain = setup_chain(FILE_NAME)
+    
+    print("PRINTING DUT")
+    print(dut)
+    print("PRINTING CHAIN")
+    print(chain.registers)
+    for register in chain.registers.items():
+      print("chain reg print")
+      print(register[1].name)
+      print(register[1].index_list)
+      print(register[1].size)
+    print(chain.chain_length)
 
     ######################
     # TODO: YOUR CODE HERE 
