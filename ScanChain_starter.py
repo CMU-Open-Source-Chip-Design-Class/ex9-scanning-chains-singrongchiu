@@ -269,14 +269,13 @@ async def test(dut):
     print(chain.chain_length)
     '''
     
-    bit_list = [1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0] # adding a = 10 and b = 7, initializing x_out to 0
-    # first 4 bits - a_reg, next 4 bits - b_reg, last 5 bits - x_out
+    bit_list = [1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0] # adding b = 10 and a = 7, initializing x_out to 0
+    # first 4 bits with msb in front - b_reg, next 4 bits - a_reg, last 5 bits - x_out
     await (input_chain(dut, bit_list, 0))
     print(f"after input x_out {dut.x_out.value}")
-    # print(f"a_in {dut.a_in.value} b_in {dut.b_in.value}")
     
     await step_clock(dut)
     outval = await (output_chain(dut, 0, 5))
-    print(f'this is what 10 + 7 is: {outval}')
+    print(f'this is what 14 + 7 is: {outval}')
     
 
