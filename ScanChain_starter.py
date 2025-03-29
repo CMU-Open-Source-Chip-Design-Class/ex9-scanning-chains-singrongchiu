@@ -7,7 +7,7 @@ from cocotb.triggers import Timer
 # to the filepath of the .log
 # file you are working with
 CHAIN_LENGTH = -1
-FILE_NAME    = ""
+FILE_NAME    = "adder/adder.log"
 
 
 
@@ -125,8 +125,13 @@ async def step_clock(dut):
     ######################
     # TODO: YOUR CODE HERE 
     ######################
-
-    pass
+    
+    dut.clk.value = 1
+    await Timer(10, units='ns')
+    dut.clk.value = 0
+    await Timer(10, units='ns')
+    
+    return
     
 
 #-------------------------------------------------------------------
