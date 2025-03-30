@@ -185,7 +185,7 @@ async def input_chain(dut, bit_list, ff_index):
     for i in range(len(bit_list)):
       dut.scan_in.value = bit_list[0]
       await step_clock(dut)
-      print(f"bit_list[0]: {bit_list[0]}")
+      # print(f"bit_list[0]: {bit_list[0]}")
       bit_list = bit_list[1:]
     
     for i in range(ff_index):
@@ -269,7 +269,7 @@ async def test(dut):
     print(chain.chain_length)
     '''
     
-    bit_list = [1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0] # adding b = 10 and a = 7, initializing x_out to 0
+    bit_list = [1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0] # adding b = 10 and a = 7, initializing x_out to 0
     # first 4 bits with msb in front - b_reg, next 4 bits - a_reg, last 5 bits - x_out
     await (input_chain(dut, bit_list, 0))
     print(f"after input x_out {dut.x_out.value}")
@@ -277,5 +277,6 @@ async def test(dut):
     await step_clock(dut)
     outval = await (output_chain(dut, 0, 5))
     print(f'this is what 14 + 7 is: {outval}')
+    assert (outval == 21)
     
 
